@@ -1,0 +1,34 @@
+<div class="media post">
+    <div class="d-flex flex-column counters">
+        <div class="vote">
+            <strong>0</strong> Votes
+        </div>
+        <div class="status">
+            <strong>0</strong> Answers
+        </div>
+        <div class="view">
+            0 Views
+        </div>
+    </div>
+    <div class="media-body">
+        <div class="d-flex align-items-center">
+            <h3 class="mt-0">
+                <a href="{% url 'qa:questions-detail' question.slug %}">{{ question.title }}</a>
+            </h3>
+            <div class="ml-auto">
+                <a href="" class="btn btn-sm btn-outline-info">Edit</a>
+                <form class="form-delete" method="post" action="">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-sm btn-outline-danger"
+                            onclick="return confirm('Are you sure?')">Delete
+                    </button>
+                </form>
+            </div>
+        </div>
+        <p class="lead">
+            Asked by
+            <a href=""></a>
+            <small class="text-muted"></small>
+        </p>
+    </div>
+</div>

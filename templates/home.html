@@ -5,9 +5,38 @@
 {% block content %}
 
     <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="d-flex align-items-center">
+                            <h2>All Questions</h2>
+                            <div class="ml-auto">
+                                <a href="{% url 'qa:questions-create' %}" class="btn btn-outline-secondary">Ask
+                                    Question</a>
+                            </div>
+                        </div>
+                    </div>
 
-        Home
+                    <div class="card-body">
+                        {#@include ('layouts._messages')#}
 
+                        {% if questions %}
+
+                            {% for question in questions %}
+                                {% include 'questions/excerpt.html' %}
+                            {% endfor %}
+
+                        {% else %}
+                            <div class="alert alert-warning">
+                                <strong>Sorry</strong> There are no questions available.
+                            </div>
+                        {% endif %}
+
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
 {% endblock %}
