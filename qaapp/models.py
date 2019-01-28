@@ -14,6 +14,7 @@ class Answer(models.Model):
 
 
 class Question(models.Model):
+    user = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='questions')
     title = models.CharField(max_length=255)
     slug = models.SlugField(unique=True)
     body = models.TextField()

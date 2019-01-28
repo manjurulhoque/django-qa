@@ -8,6 +8,7 @@ from qaapp.models import Question
 class QuestionCreateForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        # self.user = kwargs.pop('user')
         self.fields['title'].widget.attrs.update({'placeholder': 'Question title'})
         self.fields['body'].widget.attrs.update({'placeholder': 'Explain your question'})
         # self.fields['title'].label = 'Rule Title'
