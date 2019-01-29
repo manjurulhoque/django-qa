@@ -45,7 +45,7 @@
                                     <span class="text-muted">Asked By {{ question.created_at|timesince }}</span>
                                     <div class="media mt-2">
                                         <a href="" class="pr-2">
-                                            <img src="">
+                                            <img src="{{ "https://www.gravatar.com/avatar/{}?s=32" }}">
                                         </a>
                                         <div class="media-body mt-1">
                                             <a href="">{{ question.user.username }}</a>
@@ -58,6 +58,9 @@
                 </div>
             </div>
         </div>
+
+        {% include 'answers/_index.html' with answers=question.answer.all %}
+        {% include 'answers/_create.html' %}
     </div>
 
 {% endblock %}

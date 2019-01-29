@@ -1,12 +1,14 @@
 from django.contrib.auth.decorators import login_required
-from django.http import Http404
+from django.http import Http404, HttpResponseForbidden
 from django.shortcuts import render, get_object_or_404
 
 # Create your views here.
+from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import ListView, CreateView, DetailView
+from django.views.generic.edit import FormMixin
 
-from qaapp.forms import QuestionCreateForm
+from qaapp.forms import QuestionCreateForm, AnswerCreateForm
 from qaapp.models import Question
 
 
@@ -44,11 +46,12 @@ class QuestionCreateView(CreateView):
         return super(QuestionCreateView, self).form_valid(form)
 
 
-class QuestionDetailsView(DetailView):
+class QuestionDetailsView(FormMixin, DetailView):
     model = Question
     template_name = 'questions/show.html'
     context_object_name = 'question'
     queryset = Question.objects.all()
+    form_class = AnswerCreateForm
 
     def get(self, request, *args, **kwargs):
         try:
@@ -69,3 +72,23 @@ class QuestionDetailsView(DetailView):
         context = super().get_context_data(**kwargs)
         context['title'] = self.get_object().title
         return context
+
+    def post(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return HttpResponseForbidden()
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+
+    def get_success_url(self):
+        return reverse_lazy('qa:questions-detail', kwargs={'slug': self.get_object().slug})
+
+    def form_valid(self, form):
+        # save comment
+        form.instance.user = self.request.user
+        form.instance.question = self.get_object()
+        form.instance.body = form.cleaned_data["body"]
+        form.save()
+        return super().form_valid(form)

@@ -2,7 +2,7 @@ from django import forms
 from django.forms import Textarea
 from django.template.defaultfilters import slugify
 
-from qaapp.models import Question
+from qaapp.models import Question, Answer
 
 
 class QuestionCreateForm(forms.ModelForm):
@@ -39,3 +39,14 @@ class QuestionCreateForm(forms.ModelForm):
         if commit:
             question.save()
         return question
+
+
+class AnswerCreateForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["body"].widget = Textarea(attrs={'cols': 45, 'rows': 5, 'class': 'form-control'})
+        self.fields["body"].widget.attrs.update({'placeholder': 'Give proper answer'})
+
+    class Meta:
+        model = Answer
+        fields = ("body",)
