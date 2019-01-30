@@ -17,7 +17,7 @@
             </h3>
             <div class="ml-auto">
                 {% if request.user.is_authenticated and question.user.id == request.user.id %}
-                    <a href="" class="btn btn-sm btn-outline-info">Edit</a>
+                    <a href="{% url 'qa:questions-edit' question.slug %}" class="btn btn-sm btn-outline-info">Edit</a>
                     <form class="form-delete" method="post" action="">
                         {% csrf_token %}
                         <button type="submit" class="btn btn-sm btn-outline-danger"

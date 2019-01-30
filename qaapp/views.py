@@ -5,7 +5,7 @@ from django.shortcuts import render, get_object_or_404
 # Create your views here.
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
-from django.views.generic import ListView, CreateView, DetailView
+from django.views.generic import ListView, CreateView, DetailView, UpdateView
 from django.views.generic.edit import FormMixin
 
 from qaapp.forms import QuestionCreateForm, AnswerCreateForm
@@ -92,3 +92,56 @@ class QuestionDetailsView(FormMixin, DetailView):
         form.instance.body = form.cleaned_data["body"]
         form.save()
         return super().form_valid(form)
+
+
+class QuestionUpdateView(UpdateView):
+    model = Question
+    template_name = 'questions/edit.html'
+    form_class = QuestionCreateForm
+    context_object_name = 'question'
+    queryset = Question.objects.all()
+    slug_field = 'slug'
+
+    def get_object(self, queryset=None):
+        """
+            Return the object the view is displaying.
+            Require `self.queryset` and a `pk` or `slug` argument in the URLconf.
+            Subclasses can override this to return any object.
+            """
+        # Use a custom queryset if provided; this is required for subclasses
+        # like DateDetailView
+        if queryset is None:
+            queryset = self.get_queryset()
+        # Next, try looking up by primary key.
+        pk = self.kwargs.get(self.pk_url_kwarg)
+        slug = self.kwargs.get(self.slug_url_kwarg)
+        if pk is not None:
+            queryset = queryset.filter(pk=pk)
+        # Next, try looking up by slug.
+        if slug is not None and (pk is None or self.query_pk_and_slug):
+            slug_field = self.get_slug_field()
+            queryset = queryset.filter(**{slug_field: slug})
+        # If none of those are defined, it's an error.
+        if pk is None and slug is None:
+            raise AttributeError(
+                "Generic detail view %s must be called with either an object "
+                "pk or a slug in the URLconf." % self.__class__.__name__
+            )
+        try:
+            # Get the single item from the filtered queryset
+            obj = queryset.get()
+        except queryset.model.DoesNotExist:
+            raise Http404("No question found matching the query")
+        return obj
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = self.get_object().title
+        return context
+
+    def get_success_url(self):
+        return reverse_lazy('qa:questions-detail', kwargs={'slug': self.get_object().slug})
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super(QuestionUpdateView, self).form_valid(form)
