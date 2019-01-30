@@ -16,13 +16,15 @@
                 <a href="{% url 'qa:questions-detail' question.slug %}">{{ question.title }}</a>
             </h3>
             <div class="ml-auto">
-                <a href="" class="btn btn-sm btn-outline-info">Edit</a>
-                <form class="form-delete" method="post" action="">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-sm btn-outline-danger"
-                            onclick="return confirm('Are you sure?')">Delete
-                    </button>
-                </form>
+                {% if request.user.is_authenticated and question.user.id == request.user.id %}
+                    <a href="" class="btn btn-sm btn-outline-info">Edit</a>
+                    <form class="form-delete" method="post" action="">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-sm btn-outline-danger"
+                                onclick="return confirm('Are you sure?')">Delete
+                        </button>
+                    </form>
+                {% endif %}
             </div>
         </div>
         <p class="lead">

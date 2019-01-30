@@ -33,6 +33,42 @@
                             </div>
                         {% endif %}
 
+                        <div class="row justify-content-center" style="margin-top: 20px">
+                            {% if is_paginated %}
+                                <nav>
+                                    <ul class="pagination">
+                                        {% if page_obj.has_previous %}
+                                            <li class="page-item">
+                                                <a class="page-link" href="?page={{ page_obj.previous_page_number }}">&laquo;</a>
+                                            </li>
+                                        {% else %}
+                                            <li class="page-item disabled"><span class="page-link">&laquo;</span></li>
+                                        {% endif %}
+                                        {% for i in page_obj.paginator.page_range %}
+                                            {% if page_obj.number == i %}
+                                                <li class="page-item active">
+                                                    <a class="page-link" href="#">
+                                                        {{ i }} <span class="sr-only">(current)</span>
+                                                    </a>
+                                                </li>
+                                            {% else %}
+                                                <li class="page-item">
+                                                    <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+                                                </li>
+                                            {% endif %}
+                                        {% endfor %}
+                                        {% if page_obj.has_next %}
+                                            <li class="page-item">
+                                                <a class="page-link" href="?page={{ page_obj.next_page_number }}">&raquo;</a>
+                                            </li>
+                                        {% else %}
+                                            <li class="page-item disabled"><span>&raquo;</span></li>
+                                        {% endif %}
+                                    </ul>
+                                </nav>
+                            {% endif %}
+                        </div>
+
                     </div>
                 </div>
             </div>

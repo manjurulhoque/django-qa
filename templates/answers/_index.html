@@ -3,7 +3,7 @@
         <div class="card">
             <div class="card-body">
                 <div class="card-title">
-                    <h2>2 answers</h2>
+                    <h2>{{ answers.count }} answers</h2>
                 </div>
                 <hr>
 
@@ -33,13 +33,13 @@
                                class=" mt-2">
                                 <i class="fas fa-check fa-2x"></i>
                             </a>
-                            <form action=""
-                                  id="accept-answer-" method="post" style="display: none">
-                            </form>
-                            <a title="Question owner accepted this answer as best answer"
-                               class=" mt-2">
-                                <i class="fas fa-check fa-2x"></i>
-                            </a>
+{#                            <form action=""#}
+{#                                  id="accept-answer-" method="post" style="display: none">#}
+{#                            </form>#}
+{#                            <a title="Question owner accepted this answer as best answer"#}
+{#                               class=" mt-2">#}
+{#                                <i class="fas fa-check fa-2x"></i>#}
+{#                            </a>#}
                         </div>
                         <div class="media-body">
                             {{ answer.body }}
