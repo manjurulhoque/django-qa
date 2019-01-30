@@ -18,7 +18,7 @@
             <div class="ml-auto">
                 {% if request.user.is_authenticated and question.user.id == request.user.id %}
                     <a href="{% url 'qa:questions-edit' question.slug %}" class="btn btn-sm btn-outline-info">Edit</a>
-                    <form class="form-delete" method="post" action="">
+                    <form class="form-delete" method="post" action="{% url 'qa:questions-delete' question.slug %}">
                         {% csrf_token %}
                         <button type="submit" class="btn btn-sm btn-outline-danger"
                                 onclick="return confirm('Are you sure?')">Delete

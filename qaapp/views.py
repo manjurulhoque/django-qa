@@ -6,7 +6,7 @@ from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import ListView, CreateView, DetailView, UpdateView
-from django.views.generic.edit import FormMixin
+from django.views.generic.edit import FormMixin, DeleteView
 
 from qaapp.forms import QuestionCreateForm, AnswerCreateForm
 from qaapp.models import Question
@@ -145,3 +145,9 @@ class QuestionUpdateView(UpdateView):
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super(QuestionUpdateView, self).form_valid(form)
+
+
+class QuestionDestroyView(DeleteView):
+    model = Question
+    success_url = reverse_lazy('qa:home')
+    context_object_name = 'question'

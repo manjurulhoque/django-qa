@@ -6,15 +6,15 @@ from django.utils import timezone
 
 
 class Answer(models.Model):
-    question = models.ForeignKey('Question', on_delete=models.DO_NOTHING, related_name='answer')
-    user = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='answer')
+    question = models.ForeignKey('Question', on_delete=models.SET_NULL, null=True, blank=True, related_name='answer')
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='answer')
     body = models.TextField()
     created_at = models.DateTimeField(verbose_name='Created At', default=timezone.now)
     updated_at = models.DateTimeField(verbose_name='Updated At', default=timezone.now)
 
 
 class Question(models.Model):
-    user = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='questions')
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='questions')
     title = models.CharField(max_length=255)
     slug = models.SlugField(unique=True)
     body = models.TextField()
