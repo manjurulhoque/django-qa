@@ -30,3 +30,10 @@ class Question(models.Model):
     #         self.created_at = timezone.now()
     #     self.updated_at = timezone.now()
     #     return super(Question, self).save(*args, **kwargs)
+
+
+class QuestionVote(models.Model):
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='question_votes')
+    question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='question_votes')
+    vote = models.SmallIntegerField(verbose_name='Vote count')
+    created_at = models.DateTimeField(verbose_name='Created At', default=timezone.now)

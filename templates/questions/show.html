@@ -23,17 +23,41 @@
 
                         <div class="media">
                             <div class="d-fex flex-column vote-controls">
-                                <a title="This question is useful" class="vote-up">
+                                {#                                {{ vote_type }}#}
+                                {#  {% if request.user.question_votes.get(question=question) %} {% endif %}#}
+                                <a title="This question is useful"
+                                   class="vote-up {% if request.user.is_authenticated and voted and vote_type == 'upvote' %}''{% else %}off{% endif %}"
+                                   onclick="event.preventDefault(); document.getElementById('up-vote-question-{{ question.id }}').submit();">
                                     <i class="fas fa-caret-up fa-3x"></i>
                                 </a>
+                                <form id="up-vote-question-{{ question.id }}"
+                                      action="/questions/{{ question.id }}/upvote" method="POST" style="display:none;">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="vote" value="1">
+                                    <input type="hidden" name="type" value="downvote">
+                                </form>
 
-                                <span class="votes-count">1</span>
+                                {% if votes_count.vote__sum > 0 %}
+                                    <span class="votes-count">{{ votes_count.vote__sum }}</span>
+                                {% else %}
+                                    <span class="votes-count">0</span>
+                                {% endif %}
 
-                                <a title="This question is not useful" class="vote-down">
+                                <a title="This question is not useful"
+                                   class="vote-down {% if request.user.is_authenticated and voted and vote_type == 'downvote' %}''{% else %}off{% endif %}"
+                                   onclick="event.preventDefault(); document.getElementById('down-vote-question-{{ question.id }}').submit();">
                                     <i class="fas fa-caret-down fa-3x"></i>
                                 </a>
+                                <form id="down-vote-question-{{ question.id }}"
+                                      action="/questions/{{ question.id }}/downvote" method="POST"
+                                      style="display:none;">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="vote" value="-1">
+                                    <input type="hidden" name="type" value="downvote">
+                                </form>
 
-                                <a title="Click to mark as favorite question (Click again to undo)" class="favorite mt-2 favorited">
+                                <a title="Click to mark as favorite question (Click again to undo)"
+                                   class="favorite mt-2 favorited">
                                     <i class="fas fa-star fa-2x"></i>
                                     <span class="favorites-count">1</span>
                                 </a>

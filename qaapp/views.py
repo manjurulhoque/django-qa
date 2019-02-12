@@ -1,15 +1,17 @@
 from django.contrib.auth.decorators import login_required
+from django.db.models import Sum
 from django.http import Http404, HttpResponseForbidden
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 
 # Create your views here.
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import ListView, CreateView, DetailView, UpdateView
 from django.views.generic.edit import FormMixin, DeleteView
+from django.views.generic import View
 
 from qaapp.forms import QuestionCreateForm, AnswerCreateForm
-from qaapp.models import Question
+from qaapp.models import Question, QuestionVote
 
 
 def handler404(request):
@@ -71,6 +73,19 @@ class QuestionDetailsView(FormMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = self.get_object().title
+        context['votes_count'] = self.get_object().question_votes.aggregate(Sum('vote'))
+        if self.request.user.is_authenticated:
+            vote = self.request.user.question_votes.filter(question_id=self.get_object().id).first()
+            if vote:
+                context['voted'] = True
+                if vote.vote == 1:
+                    context['vote_type'] = 'upvote'
+                else:
+                    context['vote_type'] = 'downvote'
+            else:
+                context['voted'] = False
+        else:
+            context['voted'] = False
         return context
 
     def post(self, request, *args, **kwargs):
@@ -151,3 +166,39 @@ class QuestionDestroyView(DeleteView):
     model = Question
     success_url = reverse_lazy('qa:home')
     context_object_name = 'question'
+
+
+@login_required(login_url='/login')
+def question_vote(request, question_id=None, flag='upvote'):
+    # print(flag, question_id)
+    # return redirect(reverse_lazy('qa:home'))
+    question = Question.objects.get(id=question_id)
+    if request.method == 'POST':
+        if request.user.is_authenticated:
+            if QuestionVote.objects.filter(user=request.user, question=question).exists():  # check if exists
+                vote = QuestionVote.objects.get(user=request.user, question=question)
+                if vote.vote == -1 and flag == 'upvote':  # if down vote and request for upvote
+                    vote.vote = 1
+                    vote.save()
+                elif vote.vote == 1 and flag == 'upvote':  # if already given upvote and want to remove the upvote
+                    vote.delete()
+                    return redirect(reverse_lazy('qa:questions-detail', kwargs={'slug': question.slug}))
+                elif vote.vote == -1 and flag == 'downvote':  # if already given downvote and want to remove the downvote
+                    vote.delete()
+                    return redirect(reverse_lazy('qa:questions-detail', kwargs={'slug': question.slug}))
+                else:  # if already downvote and want to upvote
+                    vote.vote = 1
+                    vote.save()
+                return redirect(reverse_lazy('qa:questions-detail', kwargs={'slug': question.slug}))
+            else:
+                vote = QuestionVote()
+                vote.user = request.user
+                vote.question = question
+                if flag == 'upvote':
+                    vote.vote = 1
+                else:
+                    vote.vote = -1
+                vote.save()
+                return redirect(reverse_lazy('qa:questions-detail', kwargs={'slug': question.slug}))
+    else:
+        return redirect(reverse_lazy('qa:questions-detail', kwargs={'slug': question.slug}))
