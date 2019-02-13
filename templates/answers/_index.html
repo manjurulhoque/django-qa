@@ -10,36 +10,40 @@
                 {% for answer in answers %}
                     <div class="media">
                         <div class="d-fex flex-column vote-controls">
-                            <a title="This answer is useful"
-                               class="vote-up">
-                                <i class="fas fa-caret-up fa-3x"></i>
-                            </a>
-                            <form id="up-vote-answer"
-                                  action="/answers/" method="POST" style="display:none;">
-                                <input type="hidden" name="vote" value="1">
-                            </form>
-
-                            <span class="votes-count">2</span>
-
-                            <a title="This answer is not useful"
-                               class="vote-down">
-                                <i class="fas fa-caret-down fa-3x"></i>
-                            </a>
-                            <form id="down-vote-answer-"
-                                  action="/answers//vote" method="POST" style="display:none;">
-                                <input type="hidden" name="vote" value="-1">
-                            </form>
-                            <a title="Mark this answer as best answer"
-                               class=" mt-2">
+{#                            <a title="This answer is useful"#}
+{#                               class="vote-up">#}
+{#                                <i class="fas fa-caret-up fa-3x"></i>#}
+{#                            </a>#}
+{#                            <form id="up-vote-answer"#}
+{#                                  action="/answers/" method="POST" style="display:none;">#}
+{#                                <input type="hidden" name="vote" value="1">#}
+{#                            </form>#}
+{##}
+{#                            <span class="votes-count">2</span>#}
+{##}
+{#                            <a title="This answer is not useful"#}
+{#                               class="vote-down">#}
+{#                                <i class="fas fa-caret-down fa-3x"></i>#}
+{#                            </a>#}
+{#                            <form id="down-vote-answer-"#}
+{#                                  action="/answers//vote" method="POST" style="display:none;">#}
+{#                                <input type="hidden" name="vote" value="-1">#}
+{#                            </form>#}
+                            {% if request.user == question.user and question.best_answer_id == null %}
+                            <a title="Mark this answer as best answer" class="mt-2"
+                               onclick="event.preventDefault(); document.getElementById('accept-answer-{{ answer.id }}').submit();"
+                            >
                                 <i class="fas fa-check fa-2x"></i>
                             </a>
-{#                            <form action=""#}
-{#                                  id="accept-answer-" method="post" style="display: none">#}
-{#                            </form>#}
-{#                            <a title="Question owner accepted this answer as best answer"#}
-{#                               class=" mt-2">#}
-{#                                <i class="fas fa-check fa-2x"></i>#}
-{#                            </a>#}
+                            <form action="{% url 'qa:mark-as-best' question.id answer.id %}" id="accept-answer-{{ answer.id }}" method="post" style="display: none">
+                            {% csrf_token %}
+                            </form>
+                            {% endif %}
+                            {% if question.best_answer_id == answer.id %}
+                                <a style="color: yellow;" title="Question owner accepted this answer as best answer" class=" mt-2">
+                                    <i class="fas fa-check fa-2x"></i>
+                                </a>
+                            {% endif %}
                         </div>
                         <div class="media-body">
                             {{ answer.body }}
@@ -49,7 +53,7 @@
                                 <div class="col-4">
                                     <div class="ml-auto" style="margin-top: 10px">
                                         {% if answer.user.id == request.user.id %}
-                                            <a href="" class="btn btn-sm btn-outline-info">Edit</a>
+                                            <a href="#" class="btn btn-sm btn-outline-info">Edit</a>
                                             <form class="form-delete" method="post"
                                                   action="">
                                                 {% csrf_token %}

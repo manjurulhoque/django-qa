@@ -11,7 +11,7 @@ from django.views.generic.edit import FormMixin, DeleteView
 from django.views.generic import View
 
 from qaapp.forms import QuestionCreateForm, AnswerCreateForm
-from qaapp.models import Question, QuestionVote
+from qaapp.models import Question, QuestionVote, Answer
 
 
 def handler404(request):
@@ -200,5 +200,17 @@ def question_vote(request, question_id=None, flag='upvote'):
                     vote.vote = -1
                 vote.save()
                 return redirect(reverse_lazy('qa:questions-detail', kwargs={'slug': question.slug}))
+    else:
+        return redirect(reverse_lazy('qa:questions-detail', kwargs={'slug': question.slug}))
+
+
+@login_required(login_url='/login')
+def mark_as_best(request, question_id=None, answer_id=None):
+    question = Question.objects.get(id=question_id)
+    answer = Answer.objects.get(id=answer_id)
+    if request.method == 'POST' and question.user == request.user:
+        question.best_answer = answer
+        question.save()
+        return redirect(reverse_lazy('qa:questions-detail', kwargs={'slug': question.slug}))
     else:
         return redirect(reverse_lazy('qa:questions-detail', kwargs={'slug': question.slug}))

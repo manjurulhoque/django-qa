@@ -64,6 +64,11 @@
                             </div>
                             <div class="media-body">
                                 {{ question.body }}
+                                <div class="clearfix"></div>
+                                {% if request.user == question.user %}
+                                    <a href="{% url 'qa:questions-edit' question.slug %}"
+                                       class="btn btn-sm btn-outline-info">Edit</a>
+                                {% endif %}
                                 <div class="float-right">
                                     <span class="text-muted">Asked By {{ question.created_at|timesince }} ago</span>
                                     <div class="media mt-2">
