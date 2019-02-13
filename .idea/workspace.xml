@@ -1,13 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e8506e64-27da-48a1-9f3a-ff238a472609" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/qaapp/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/qaapp/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/answers/_index.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/answers/_index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/questions/excerpt.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/questions/excerpt.html" afterDir="false" />
-    </list>
+    <list default="true" id="e8506e64-27da-48a1-9f3a-ff238a472609" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -100,16 +94,25 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/templates/answers/_index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="357">
-              <caret line="48" column="49" selection-start-line="48" selection-start-column="49" selection-end-line="48" selection-end-column="49" />
+            <state relative-caret-position="105">
+              <caret line="47" column="37" selection-start-line="47" selection-start-column="37" selection-end-line="47" selection-end-column="37" />
               <folding>
                 <element signature="n#style#0;n#form#0;n#div#0;n#div#1;n#div#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#a#1;n#div#0;n#div#1;n#div#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#div#1;n#div#1;n#div#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/.gitignore">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="189">
+              <caret line="9" column="17" lean-forward="true" selection-start-line="9" selection-start-column="17" selection-end-line="9" selection-end-column="17" />
             </state>
           </provider>
         </entry>
@@ -175,11 +178,11 @@
         <option value="$PROJECT_DIR$/qaapp/urls.py" />
         <option value="$APPLICATION_CONFIG_DIR$/consoles/.datagrid/cell" />
         <option value="$PROJECT_DIR$/templates/questions/show.html" />
-        <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/templates/home.html" />
         <option value="$PROJECT_DIR$/templates/questions/excerpt.html" />
         <option value="$PROJECT_DIR$/qaapp/views.py" />
         <option value="$PROJECT_DIR$/templates/answers/_index.html" />
+        <option value="$PROJECT_DIR$/.gitignore" />
       </list>
     </option>
   </component>
@@ -203,11 +206,6 @@
             <path>
               <item name="qa" type="b2602c69:ProjectViewProjectNode" />
               <item name="qa" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="qa" type="b2602c69:ProjectViewProjectNode" />
-              <item name="qa" type="462c0819:PsiDirectoryNode" />
-              <item name="qaapp" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -292,12 +290,12 @@
       <workItem from="1548854883969" duration="7857000" />
       <workItem from="1548955080035" duration="3004000" />
       <workItem from="1549983906905" duration="6813000" />
-      <workItem from="1550069020142" duration="6305000" />
+      <workItem from="1550069020142" duration="6999000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="64768000" />
+    <option name="totallyTimeSpent" value="65462000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -626,13 +624,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="5" column="5" lean-forward="true" selection-start-line="5" selection-start-column="5" selection-end-line="5" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/templates/questions/show.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="273">
@@ -676,13 +667,20 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/templates/answers/_index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="48" column="49" selection-start-line="48" selection-start-column="49" selection-end-line="48" selection-end-column="49" />
+        <state relative-caret-position="105">
+          <caret line="47" column="37" selection-start-line="47" selection-start-column="37" selection-end-line="47" selection-end-column="37" />
           <folding>
             <element signature="n#style#0;n#form#0;n#div#0;n#div#1;n#div#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#a#1;n#div#0;n#div#1;n#div#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#div#1;n#div#1;n#div#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="189">
+          <caret line="9" column="17" lean-forward="true" selection-start-line="9" selection-start-column="17" selection-end-line="9" selection-end-column="17" />
         </state>
       </provider>
     </entry>
