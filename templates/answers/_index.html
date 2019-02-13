@@ -46,7 +46,7 @@
                             {% endif %}
                         </div>
                         <div class="media-body">
-                            {{ answer.body }}
+                            {{ answer.body | safe }}
 
                             <div class="row">
 
@@ -57,7 +57,7 @@
                                             <form class="form-delete" method="post"
                                                   action="">
                                                 {% csrf_token %}
-                                                <button type="submit" class="btn btn-sm btn-outline-danger"
+                                                <button type="button" class="btn btn-sm btn-outline-danger"
                                                         onclick="return confirm('Are you sure?')">Delete
                                                 </button>
                                             </form>

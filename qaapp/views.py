@@ -23,7 +23,7 @@ class QuestionListView(ListView):
     queryset = Question.objects.all()
     context_object_name = "questions"
     template_name = 'home.html'
-    paginate_by = 2
+    paginate_by = 3
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

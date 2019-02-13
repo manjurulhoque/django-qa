@@ -1,10 +1,10 @@
 <div class="media post">
     <div class="d-flex flex-column counters">
         <div class="vote">
-            <strong>0</strong> Votes
+            <strong>{{ question.question_votes.count }}</strong> Votes
         </div>
-        <div class="status">
-            <strong>0</strong> Answers
+        <div class="status {% if question.answer.count %}answered{% endif %}">
+            <strong>{{ question.answer.count }}</strong> Answers
         </div>
         <div class="view">
             0 Views

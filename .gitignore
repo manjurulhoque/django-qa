@@ -1,7 +1,7 @@
 
 # Created by https://www.gitignore.io/api/python,django,pycharm
 # Edit at https://www.gitignore.io/?templates=python,django,pycharm
-
+.idea
 ### Django ###
 *.log
 *.pot
