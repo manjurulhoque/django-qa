@@ -9,6 +9,7 @@ urlpatterns = [
 
     # API
     path('api/', include('accounts.api.urls')),
+    path('api/', include('qaapp.api.urls')),
 ]
 
 # handler404 = views.handler404

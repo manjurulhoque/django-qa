@@ -258,3 +258,5 @@ fabric.properties
 .venv/
 
 # End of https://www.gitignore.io/api/python,django,pycharm
+
+__pycache__/
