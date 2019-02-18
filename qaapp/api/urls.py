@@ -9,6 +9,7 @@ router.register('question', QuestionViewSet, base_name='questions')
 
 urlpatterns = [
     path('questions/', views.QuestionListApiView.as_view()),
+    path('questions/<int:question_id>/<str:flag>', views.question_vote),
 ]
 
 urlpatterns += router.urls

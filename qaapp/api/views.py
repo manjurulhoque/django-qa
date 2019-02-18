@@ -1,4 +1,6 @@
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework import viewsets, mixins, status
+from rest_framework.decorators import api_view
 from rest_framework.generics import ListAPIView
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
@@ -6,6 +8,7 @@ from rest_framework_simplejwt.models import TokenUser
 
 from qaapp.api.custom_pagination import QuestionPagination
 from qaapp.api.custom_permission import CustomIsAuthenticated
+from qaapp.models import Question, QuestionVote
 from .serializers import QuestionSerializer
 
 
@@ -65,3 +68,42 @@ class QuestionViewSet(mixins.CreateModelMixin,
 
     def perform_destroy(self, instance):
         instance.delete()
+
+
+@api_view(['POST'])
+@csrf_exempt
+def question_vote(request, question_id=None, flag='upvote'):
+    # print(flag, question_id)
+    # return redirect(reverse_lazy('qa:home'))
+    question = Question.objects.get(id=question_id)
+    if request.method == 'POST':
+        if QuestionVote.objects.filter(user=request.user, question=question).exists():  # check if exists
+            vote = QuestionVote.objects.get(user=request.user, question=question)
+            if vote.vote == -1 and flag == 'upvote':  # if down vote and request for upvote
+                vote.vote = 1
+                vote.save()
+                return Response({'status': True, 'message': 'upvoted'}, status.HTTP_200_OK)
+            elif vote.vote == 1 and flag == 'upvote':  # if already given upvote and want to remove the upvote
+                vote.delete()
+                return Response({'status': True, 'message': 'upvote removeed'}, status.HTTP_200_OK)
+            elif vote.vote == -1 and flag == 'downvote':  # if already given downvote and want to remove the downvote
+                vote.delete()
+                return Response({'status': True, 'message': 'downvote removed'}, status.HTTP_200_OK)
+            else:  # if already downvote and want to upvote
+                vote.vote = 1
+                vote.save()
+            return Response({'status': True, 'message': 'upvoted'}, status.HTTP_200_OK)
+        else:
+            vote = QuestionVote()
+            vote.user = request.user
+            vote.question = question
+            if flag == 'upvote':
+                vote.vote = 1
+                vote.save()
+                return Response({'status': True, 'message': 'upvoted'}, status.HTTP_200_OK)
+            else:
+                vote.vote = -1
+                vote.save()
+                return Response({'status': True, 'message': 'dowvoted'}, status.HTTP_200_OK)
+    else:
+        return Response({'message': 'Unauthorized'}, status.HTTP_401_UNAUTHORIZED)
