@@ -7,9 +7,9 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.models import TokenUser
 
 from qaapp.api.custom_pagination import QuestionPagination
-from qaapp.api.custom_permission import CustomIsAuthenticated
+from qaapp.api.custom_permission import CustomIsAuthenticated, IsAuthenticatedForQuestionFavorite
 from qaapp.models import Question, QuestionVote
-from .serializers import QuestionSerializer
+from .serializers import QuestionSerializer, QuestionFavoriteSerializer
 
 
 class QuestionListApiView(ListAPIView):
@@ -107,3 +107,40 @@ def question_vote(request, question_id=None, flag='upvote'):
                 return Response({'status': True, 'message': 'dowvoted'}, status.HTTP_200_OK)
     else:
         return Response({'message': 'Unauthorized'}, status.HTTP_401_UNAUTHORIZED)
+
+
+class QuestionFavoriteViewSet(mixins.CreateModelMixin,
+                              mixins.RetrieveModelMixin,
+                              mixins.DestroyModelMixin,
+                              viewsets.GenericViewSet):
+    serializer_class = QuestionFavoriteSerializer
+    queryset = serializer_class.Meta.model.objects.all()
+    # permission_classes = (IsAuthenticatedForQuestionFavorite,)
+
+    """
+       Create a model instance
+    """
+
+    def create(self, request, *args, **kwargs):
+        print(kwargs)
+        question = Question.objects.get(id=kwargs.pop('question_id'))
+        serializer = self.get_serializer(data={'question': question.id, 'user': self.request.user.id})
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def perform_create(self, serializer):
+        serializer.save()
+
+    """
+        Destroy a model instance.
+    """
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        self.perform_destroy(instance)
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    def perform_destroy(self, instance):
+        instance.delete()
