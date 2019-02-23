@@ -1,3 +1,5 @@
+from django.db.models import Prefetch
+from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import viewsets, mixins, status
 from rest_framework.decorators import api_view
@@ -8,7 +10,7 @@ from rest_framework_simplejwt.models import TokenUser
 
 from qaapp.api.custom_pagination import QuestionPagination
 from qaapp.api.custom_permission import CustomIsAuthenticated, IsAuthenticatedForQuestionFavorite
-from qaapp.models import Question, QuestionVote
+from qaapp.models import Question, QuestionVote, Answer
 from .serializers import QuestionSerializer, QuestionFavoriteSerializer
 
 
@@ -41,6 +43,23 @@ class QuestionViewSet(mixins.CreateModelMixin,
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+
+    def get_object(self):
+        queryset = self.filter_queryset(self.get_queryset())
+        # Perform the lookup filtering.
+        lookup_url_kwarg = self.lookup_url_kwarg or self.lookup_field
+        filter_kwargs = {self.lookup_field: self.kwargs[lookup_url_kwarg]}
+        # print(self.kwargs)
+        obj = get_object_or_404(queryset, **filter_kwargs)
+        # May raise a permission denied
+        self.check_object_permissions(self.request, obj)
+
+        return obj
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
 
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
