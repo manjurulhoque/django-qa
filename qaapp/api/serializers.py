@@ -11,6 +11,7 @@ class QuestionFavoriteSerializer(serializers.ModelSerializer):
 
 
 class AnswerSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
     class Meta:
         model = Answer
         fields = "__all__"
