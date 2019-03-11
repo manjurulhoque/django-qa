@@ -12,15 +12,17 @@ class QuestionFavoriteSerializer(serializers.ModelSerializer):
 
 class AnswerSerializer(serializers.ModelSerializer):
     user = UserSerializer()
+
     class Meta:
         model = Answer
         fields = "__all__"
 
 
 class QuestionSerializer(serializers.ModelSerializer):
-    answers = AnswerSerializer(many=True)
-    user = UserSerializer()
+    answers = AnswerSerializer(many=True, read_only=True)
+    user = UserSerializer(read_only=True) # read only mean
 
     class Meta:
         model = Question
         fields = "__all__"
+        # read_only_fields = ("user", "answers")
