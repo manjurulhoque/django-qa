@@ -11,6 +11,7 @@ router.register(r'question/(?P<question_id>\d+)/favorites', QuestionFavoriteView
 urlpatterns = [
     path('questions/', views.QuestionListApiView.as_view()),
     path('questions/<int:question_id>/<str:flag>', views.question_vote),
+    path('check-user-vote/<int:question_id>/', views.check_user_vote),
 ]
 
 urlpatterns += router.urls

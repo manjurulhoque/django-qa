@@ -1,4 +1,5 @@
 from django.db.models import Prefetch
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import viewsets, mixins, status
@@ -163,3 +164,26 @@ class QuestionFavoriteViewSet(mixins.CreateModelMixin,
 
     def perform_destroy(self, instance):
         instance.delete()
+
+
+@api_view(['GET'])
+def check_user_vote(request, question_id=None):
+    question = Question.objects.get(id=question_id)
+    if not question:
+        return JsonResponse({'status': False, 'message': 'Question not found'})
+
+    context = {}
+    if request.user.is_authenticated:
+        vote = request.user.question_votes.filter(question_id=question_id).first()
+        if vote:
+            context['voted'] = True
+            if vote.vote == 1:
+                context['vote_type'] = 'upvote'
+            else:
+                context['vote_type'] = 'downvote'
+        else:
+            context['voted'] = False
+
+    else:
+        context['voted'] = False
+    return JsonResponse({'status': True, 'context': context})

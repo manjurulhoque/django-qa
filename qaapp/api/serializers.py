@@ -20,7 +20,7 @@ class AnswerSerializer(serializers.ModelSerializer):
 
 class QuestionSerializer(serializers.ModelSerializer):
     answers = AnswerSerializer(many=True, read_only=True)
-    user = UserSerializer(read_only=True) # read only mean
+    user = UserSerializer(read_only=True)  # read only mean
 
     class Meta:
         model = Question
