@@ -1,4 +1,4 @@
-from django.db.models import Prefetch
+from django.db.models import Prefetch, Sum
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
@@ -60,7 +60,9 @@ class QuestionViewSet(mixins.CreateModelMixin,
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
         serializer = self.get_serializer(instance)
-        return Response(serializer.data)
+        data = serializer.data
+        data['votes_count'] = instance.question_votes.aggregate(Sum('vote'))['vote__sum']
+        return Response(data)
 
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
