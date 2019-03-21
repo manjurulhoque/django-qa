@@ -62,6 +62,7 @@ class QuestionViewSet(mixins.CreateModelMixin,
         serializer = self.get_serializer(instance)
         data = serializer.data
         data['votes_count'] = instance.question_votes.aggregate(Sum('vote'))['vote__sum']
+        data['favorites_count'] = instance.question_favorites.count()
         return Response(data)
 
     def update(self, request, *args, **kwargs):
