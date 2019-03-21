@@ -6,7 +6,7 @@ from . import views
 
 router = DefaultRouter()
 router.register('question', QuestionViewSet, base_name='questions')
-router.register(r'question/(?P<question_id>\d+)/favorites', QuestionFavoriteViewSet, base_name='questions-favorites')
+router.register(r'favorite/(?P<question_id>\d+)/question', QuestionFavoriteViewSet, base_name='questions-favorites')
 
 urlpatterns = [
     path('questions/', views.QuestionListApiView.as_view()),

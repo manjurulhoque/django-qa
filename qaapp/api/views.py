@@ -11,7 +11,7 @@ from rest_framework_simplejwt.models import TokenUser
 
 from qaapp.api.custom_pagination import QuestionPagination
 from qaapp.api.custom_permission import CustomIsAuthenticated, IsAuthenticatedForQuestionFavorite
-from qaapp.models import Question, QuestionVote, Answer
+from qaapp.models import Question, QuestionVote, Answer, Favorite
 from .serializers import QuestionSerializer, QuestionFavoriteSerializer
 
 
@@ -132,7 +132,6 @@ def question_vote(request, question_id=None, flag='upvote'):
 
 
 class QuestionFavoriteViewSet(mixins.CreateModelMixin,
-                              mixins.RetrieveModelMixin,
                               mixins.DestroyModelMixin,
                               viewsets.GenericViewSet):
     serializer_class = QuestionFavoriteSerializer
@@ -144,8 +143,9 @@ class QuestionFavoriteViewSet(mixins.CreateModelMixin,
     """
 
     def create(self, request, *args, **kwargs):
-        print(kwargs)
         question = Question.objects.get(id=kwargs.pop('question_id'))
+        if self.get_queryset().filter(question_id=question.id, user_id=request.user.id).exists():
+            return Response({'status': False, 'message': 'already favourited'}, status=status.HTTP_201_CREATED)
         serializer = self.get_serializer(data={'question': question.id, 'user': self.request.user.id})
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
@@ -160,9 +160,11 @@ class QuestionFavoriteViewSet(mixins.CreateModelMixin,
     """
 
     def destroy(self, request, *args, **kwargs):
-        instance = self.get_object()
+        instance = Question.objects.get(id=kwargs.pop('question_id'))
+        if not instance:
+            return Response({'status': False, 'message': 'Invalid'}, status=status.HTTP_201_CREATED)
         self.perform_destroy(instance)
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response({'status': True, 'message': 'unfavorited'}, status=status.HTTP_204_NO_CONTENT)
 
     def perform_destroy(self, instance):
         instance.delete()
@@ -177,6 +179,11 @@ def check_user_vote(request, question_id=None):
     context = {}
     if request.user.is_authenticated:
         vote = request.user.question_votes.filter(question_id=question_id).first()
+        if Favorite.objects.filter(user_id=request.user.id, question_id=question.id).exists():
+            context['favorited'] = True
+        else:
+            context['favorited'] = False
+
         if vote:
             context['voted'] = True
             if vote.vote == 1:
@@ -185,6 +192,7 @@ def check_user_vote(request, question_id=None):
                 context['vote_type'] = 'downvote'
         else:
             context['voted'] = False
+
 
     else:
         context['voted'] = False
